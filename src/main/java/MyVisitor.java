@@ -2,14 +2,11 @@
  * Created by tokitake on 2015/07/23.
  */
 
-import org.apache.commons.lang.StringUtils;
+import java.util.List;
+
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.SimplePropertyDescriptor;
 import org.eclipse.jdt.core.dom.StructuralPropertyDescriptor;
-
-import java.util.List;
 
 public class MyVisitor extends ASTVisitor {
 
@@ -19,7 +16,8 @@ public class MyVisitor extends ASTVisitor {
 
     //Modifiers
     //sb.append(StringUtils.join(node.modifiers(), " "));
-    sb.append(node.getNodeType());
+    sb.append(node.getNodeType()).append(", ").append(node.getClass().getSimpleName()).append(", ")
+    .append(node.toString());
     sb.append(" ");
     List<StructuralPropertyDescriptor> structualProperties = node.structuralPropertiesForType();
     for (StructuralPropertyDescriptor descriptor: structualProperties) {
