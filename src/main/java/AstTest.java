@@ -20,15 +20,9 @@ import org.eclipse.jdt.core.dom.StructuralPropertyDescriptor;
 public class AstTest {
 
 	public static void main(String[] args) {
-		if (args.length != 2) {
-			System.out.println("File is not defined.");
-			System.exit(1);
-		}
 		try {
-			System.out.println("Reading " + args[0] + " . . .");
 			StringBuffer sb = new StringBuffer();
-			BufferedReader br = new BufferedReader(new InputStreamReader(
-					new FileInputStream(args[0])));
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			String line;
 			while ((line = br.readLine()) != null) {
 				sb.append(line + "\n");
@@ -43,15 +37,13 @@ public class AstTest {
 		  	XmlBuilder xb = new XmlBuilder();
 			StringBuilder out = new StringBuilder();
 			scan(unit, xb, unit, out, 0);
-		  	xb.save(args[1]);
+		  	xb.save();
 			System.out.println(out);
 
 			System.out.println("Done !");
 		} catch (FileNotFoundException e) {
-			System.out.println("File " + args[0] + " not found.");
 			return;
 		} catch (IOException e) {
-			System.out.println("IO Exception !");
 			return;
 		}
 	}
@@ -77,10 +69,10 @@ public class AstTest {
 		attributes.put("endLine", String.valueOf(endLine));
 		attributes.put("endColumn", String.valueOf(endColumn));
 	  	xb.addNode(
-	  	    node.getClass().getSimpleName(),
-	  	    depth,
-	  	    attributes
-	  	);
+		    node.getClass().getSimpleName(),
+		    depth,
+		    attributes
+		);
 
 		List<StructuralPropertyDescriptor> structualProperties = node
 				.structuralPropertiesForType();

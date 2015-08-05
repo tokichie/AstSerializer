@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -61,10 +62,9 @@ public class XmlBuilder {
     }
   }
 
-  public void save(String path) {
+  public void save() {
     try {
-      File file = new File(path);
-      BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+      BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(System.out));
       writer.write(sb.toString());
       writer.newLine();
       writer.close();
