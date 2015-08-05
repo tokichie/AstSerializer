@@ -20,7 +20,7 @@ import org.eclipse.jdt.core.dom.StructuralPropertyDescriptor;
 public class AstTest {
 
 	public static void main(String[] args) {
-		if (args.length != 1) {
+		if (args.length != 2) {
 			System.out.println("File is not defined.");
 			System.exit(1);
 		}
@@ -43,7 +43,7 @@ public class AstTest {
 		  	XmlBuilder xb = new XmlBuilder();
 			StringBuilder out = new StringBuilder();
 			scan(unit, xb, unit, out, 0);
-		  	xb.save("/tmp/out.xml");
+		  	xb.save(args[1]);
 			System.out.println(out);
 
 			System.out.println("Done !");
@@ -67,6 +67,20 @@ public class AstTest {
 	private static void scan(final CompilationUnit unit, final XmlBuilder xb, ASTNode node, StringBuilder sb, int depth) {
 		sb.append(indent(depth)).append(node.getClass().getSimpleName())
 				.append("| ");
+		HashMap<String, String> attributes = new HashMap<String, String>();
+		int startLine = unit.getLineNumber(node.getStartPosition());
+		int startColumn = unit.getColumnNumber(node.getStartPosition());
+		int endLine = startLine + StringUtils.countMatches(node.toString().trim(), "\n");
+		int endColumn = startColumn + node.getLength();
+		attributes.put("startLine", String.valueOf(startLine));
+		attributes.put("startColumn", String.valueOf(startColumn));
+		attributes.put("endLine", String.valueOf(endLine));
+		attributes.put("endColumn", String.valueOf(endColumn));
+	  	xb.addNode(
+	  	    node.getClass().getSimpleName(),
+	  	    depth,
+	  	    attributes
+	  	);
 
 		List<StructuralPropertyDescriptor> structualProperties = node
 				.structuralPropertiesForType();
@@ -75,31 +89,11 @@ public class AstTest {
 			sb.append(delimiter).append(desc.getId()).append(": ");
 			if (desc.isSimpleProperty()) {
 				sb.append(node.getStructuralProperty(desc)).append("\n");
-                            	HashMap<String, String> attributes = new HashMap<String, String>();
-			  	int startLine = unit.getLineNumber(node.getStartPosition());
-			  	int startColumn = unit.getColumnNumber(node.getStartPosition());
-			  	int endLine = startLine + StringUtils.countMatches(node.toString().trim(), "\n");
-			  	int endColumn = startColumn + node.getLength();
-			  	attributes.put("startLine", String.valueOf(startLine));
-			  	attributes.put("startColumn", String.valueOf(startColumn));
-			  	attributes.put("endLine", String.valueOf(endLine));
-			  	attributes.put("endColumn", String.valueOf(endColumn));
-			  	xb.addNode(
-				    node.getClass().getSimpleName(),
-				    String.valueOf(node.getStructuralProperty(desc)),
-				    depth,
-				    attributes
-				);
+			  	xb.addContent(node.getStructuralProperty(desc).toString(), depth);
 			} else if (desc.isChildProperty()) {
 				ASTNode childNode = (ASTNode) node.getStructuralProperty(desc);
 				sb.append("\n");
 				if (childNode != null) {
-				  	xb.addNode(
-				  	    node.getClass().getSimpleName(),
-				  	    null,
-				  	    depth,
-				  	    null
-				  	);
 					scan(unit, xb, childNode, sb, depth + 1);
 				}
 			} else if (desc.isChildListProperty()) {
@@ -107,26 +101,13 @@ public class AstTest {
 						.getStructuralProperty(desc);
 				sb.append("\n");
 				if (childNodes != null) {
-				  	xb.addNode(
-				  	    node.getClass().getSimpleName(),
-				  	    null,
-				  	    depth,
-				  	    null
-				  	);
 					for (ASTNode childNode : childNodes) {
 						scan(unit, xb, childNode, sb, depth + 1);
 					}
 				}
-			} else {
-			  xb.addNode(
-			      desc.getId(),
-			      null,
-			      depth,
-			      null
-			  );
 			}
 			delimiter = indent(depth + 1);
-		  	xb.closeNode(node.getClass().getSimpleName(), depth);
 		}
+	  	xb.closeNode(node.getClass().getSimpleName(), depth);
 	}
 }

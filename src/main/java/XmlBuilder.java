@@ -33,7 +33,7 @@ public class XmlBuilder {
     sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n");
   }
 
-  public void addNode(String name, String content, int depth, HashMap<String, String> attributes) {
+  public void addNode(String name, int depth, HashMap<String, String> attributes) {
     indent(depth);
     sb.append("<").append(name);
     if (attributes != null) {
@@ -42,13 +42,12 @@ public class XmlBuilder {
             .append("\"");
       }
     }
-    sb.append(">");
-    if (content != null) {
-      indent(depth + 1);
-      sb.append(content.trim());
-    } else {
-      sb.append("\n");
-    }
+    sb.append(">\n");
+  }
+
+  public void addContent(String content, int depth) {
+    sb.delete(sb.length() - 1, sb.length());
+    sb.append(content.trim());
   }
 
   public void closeNode(String name, int depth) {
