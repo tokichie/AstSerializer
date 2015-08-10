@@ -1,4 +1,5 @@
 package com.github.tokichie;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -31,7 +32,27 @@ public class XmlBuilder {
 
   public void addContent(String content, int depth) {
     sb.delete(sb.length() - 1, sb.length());
-    sb.append(content.trim());
+    sb.append(escape(content.trim()));
+  }
+
+  public String escape(String content) {
+    StringBuffer buffer = new StringBuffer();
+    for (int i = 0; i < content.length(); i++) {
+      char c = content.charAt(i);
+      if (c == '<')
+        buffer.append("&lt;");
+      else if (c == '>')
+        buffer.append("&gt;");
+      else if (c == '&')
+        buffer.append("&amp;");
+      else if (c == '"')
+        buffer.append("&quot;");
+      else if (c == '\'')
+        buffer.append("&apos;");
+      else
+        buffer.append(c);
+    }
+    return buffer.toString();
   }
 
   public void closeNode(String name, int depth) {
