@@ -53,3 +53,8 @@ pom.xml.next
 release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
+
+# Eclipse
+.settings
+.classpath
+.project
