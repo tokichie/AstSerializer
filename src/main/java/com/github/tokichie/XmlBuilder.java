@@ -1,26 +1,10 @@
-import org.apache.commons.lang.StringUtils;
-import org.eclipse.core.internal.utils.FileUtil;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+package com.github.tokichie;
 
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Stack;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 /**
  * Created by tokitake on 2015/07/29.
@@ -48,7 +32,27 @@ public class XmlBuilder {
 
   public void addContent(String content, int depth) {
     sb.delete(sb.length() - 1, sb.length());
-    sb.append(content.trim());
+    sb.append(escape(content.trim()));
+  }
+
+  public String escape(String content) {
+    StringBuffer buffer = new StringBuffer();
+    for (int i = 0; i < content.length(); i++) {
+      char c = content.charAt(i);
+      if (c == '<')
+        buffer.append("&lt;");
+      else if (c == '>')
+        buffer.append("&gt;");
+      else if (c == '&')
+        buffer.append("&amp;");
+      else if (c == '"')
+        buffer.append("&quot;");
+      else if (c == '\'')
+        buffer.append("&apos;");
+      else
+        buffer.append(c);
+    }
+    return buffer.toString();
   }
 
   public void closeNode(String name, int depth) {
