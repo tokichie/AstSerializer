@@ -18,6 +18,10 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.StructuralPropertyDescriptor;
 
 public class AstTest {
+  	public static final String StartLineName = "startline";
+  	public static final String StartPositionName = "startpos";
+  	public static final String EndLineName = "endline"; // Inclusive
+  	public static final String EndPositionName = "endpos"; // Inclusive
 
 	public static void main(String[] args) {
 		try {
@@ -64,10 +68,10 @@ public class AstTest {
 		int startColumn = unit.getColumnNumber(node.getStartPosition());
 		int endLine = startLine + StringUtils.countMatches(node.toString().trim(), "\n");
 		int endColumn = startColumn + node.getLength();
-		attributes.put("startLine", String.valueOf(startLine));
-		attributes.put("startColumn", String.valueOf(startColumn));
-		attributes.put("endLine", String.valueOf(endLine));
-		attributes.put("endColumn", String.valueOf(endColumn));
+		attributes.put(StartLineName, String.valueOf(startLine));
+		attributes.put(StartPositionName, String.valueOf(startColumn));
+		attributes.put(EndLineName, String.valueOf(endLine));
+		attributes.put(EndPositionName, String.valueOf(endColumn));
 	  	xb.addNode(
 		    node.getClass().getSimpleName(),
 		    depth,
