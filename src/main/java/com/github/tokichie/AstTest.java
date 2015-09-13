@@ -27,6 +27,7 @@ public class AstTest {
   public static void main(String[] args) {
     try {
       StringBuffer sb = new StringBuffer();
+      //BufferedReader br = new BufferedReader(new InputStreamReader(ClassLoader.getSystemResourceAsStream("Test2.java")));
       BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
       String line;
       while ((line = br.readLine()) != null) {
@@ -79,8 +80,10 @@ public class AstTest {
     for (StructuralPropertyDescriptor desc : structualProperties) {
       sb.append(delimiter).append(desc.getId()).append(": ");
       if (desc.isSimpleProperty()) {
-        sb.append(node.getStructuralProperty(desc)).append("\n");
-        xb.addContent(node.getStructuralProperty(desc).toString(), depth);
+        Object property = node.getStructuralProperty(desc);
+        if (property == null) continue;
+        sb.append(property).append("\n");
+        xb.addContent(property.toString(), depth);
       } else if (desc.isChildProperty()) {
         ASTNode childNode = (ASTNode) node.getStructuralProperty(desc);
         sb.append("\n");
