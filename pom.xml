@@ -5,7 +5,7 @@
 
 	<groupId>com.github.tokichie</groupId>
 	<artifactId>ast-serializer</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.3-SNAPSHOT</version>
 
 	<dependencies>
 		<dependency>
