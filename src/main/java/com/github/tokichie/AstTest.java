@@ -16,6 +16,8 @@ import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.SimplePropertyDescriptor;
 import org.eclipse.jdt.core.dom.StructuralPropertyDescriptor;
 
 public class AstTest {
@@ -27,7 +29,7 @@ public class AstTest {
   public static void main(String[] args) {
     try {
       StringBuffer sb = new StringBuffer();
-      //BufferedReader br = new BufferedReader(new InputStreamReader(ClassLoader.getSystemResourceAsStream("Test2.java")));
+//      BufferedReader br = new BufferedReader(new InputStreamReader(ClassLoader.getSystemResourceAsStream("Test3.java")));
       BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
       String line;
       while ((line = br.readLine()) != null) {
@@ -73,7 +75,7 @@ public class AstTest {
     attributes.put(StartPositionName, String.valueOf(startColumn));
     attributes.put(EndLineName, String.valueOf(endLine));
     attributes.put(EndPositionName, String.valueOf(endColumn));
-    xb.addNode(node.getClass().getSimpleName(), depth, attributes);
+    xb.addNode(node, depth, attributes);
 
     List<StructuralPropertyDescriptor> structualProperties = node.structuralPropertiesForType();
     String delimiter = "";
@@ -82,8 +84,10 @@ public class AstTest {
       if (desc.isSimpleProperty()) {
         Object property = node.getStructuralProperty(desc);
         if (property == null) continue;
+        //System.out.println(property.toString() + " : " + ((SimplePropertyDescriptor)desc).getValueType().toString());
+        //if (((SimplePropertyDescriptor)desc).getValueType() != String.class) continue;
         sb.append(property).append("\n");
-        xb.addContent(property.toString(), depth);
+        xb.addProperty(desc.getId(), property.toString(), depth + 1);
       } else if (desc.isChildProperty()) {
         ASTNode childNode = (ASTNode) node.getStructuralProperty(desc);
         sb.append("\n");

@@ -1,9 +1,15 @@
 package com.github.tokichie;
 
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.Expression;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,7 +24,15 @@ public class XmlBuilder {
     sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n");
   }
 
-  public void addNode(String name, int depth, HashMap<String, String> attributes) {
+  public void addNode(ASTNode node, int depth, HashMap<String, String> attributes) {
+//    List<String> ExpressionNodes = new ArrayList<String>(Arrays.asList(
+//        "Name", "NumberLiteral", "NullLiteral", "Assignment", "InfixExpression", "PostfixExpression", "PrefixExpression"));
+//    System.out.println(node.getClass().getSuperclass().getSimpleName());
+//    if (ExpressionNodes.contains(node.getClass().getSuperclass().getSimpleName()) ||
+//        ExpressionNodes.contains(node.getClass().getSimpleName())) {
+//      name = "ExpressionToken";
+//    }
+    String name = node.getClass().getSimpleName();
     indent(depth);
     sb.append("<").append(name);
     if (attributes != null) {
@@ -33,6 +47,13 @@ public class XmlBuilder {
   public void addContent(String content, int depth) {
     sb.delete(sb.length() - 1, sb.length());
     sb.append(escape(content.trim()));
+  }
+
+  public void addProperty(String propertyId, String token, int depth) {
+    sb.delete(sb.length() - 1, sb.length());
+    sb.append("<").append(propertyId).append(">")
+        .append(escape(token.trim()))
+        .append("</").append(propertyId).append(">");
   }
 
   public String escape(String content) {
