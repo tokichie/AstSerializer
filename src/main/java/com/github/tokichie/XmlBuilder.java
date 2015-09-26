@@ -49,11 +49,16 @@ public class XmlBuilder {
     sb.append(escape(content.trim()));
   }
 
-  public void addProperty(String propertyId, String token, int depth) {
+  public void addProperty(String propertyId, String token, int depth, HashMap<String, String> attributes) {
     sb.delete(sb.length() - 1, sb.length());
-    sb.append("<").append(propertyId).append(">")
-        .append(escape(token.trim()))
-        .append("</").append(propertyId).append(">");
+    sb.append("<").append(propertyId);
+    if (attributes != null) {
+      for (Map.Entry<String, String> attribute : attributes.entrySet()) {
+        sb.append(" ").append(attribute.getKey()).append("=\"").append(attribute.getValue())
+            .append("\"");
+      }
+    }
+    sb.append(">").append(escape(token.trim())).append("</").append(propertyId).append(">");
   }
 
   public String escape(String content) {

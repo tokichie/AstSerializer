@@ -87,7 +87,7 @@ public class AstTest {
         //System.out.println(property.toString() + " : " + ((SimplePropertyDescriptor)desc).getValueType().toString());
         //if (((SimplePropertyDescriptor)desc).getValueType() != String.class) continue;
         sb.append(property).append("\n");
-        xb.addProperty(desc.getId(), property.toString(), depth + 1);
+        xb.addProperty(desc.getId(), property.toString(), depth + 1, attributes);
       } else if (desc.isChildProperty()) {
         ASTNode childNode = (ASTNode) node.getStructuralProperty(desc);
         sb.append("\n");
